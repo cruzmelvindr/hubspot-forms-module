@@ -1,0 +1,44 @@
+{% set x = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'] %}
+{% set y = '9' %}
+{% set bgTypes = x|random ~ x|random ~ x|random ~ y|random ~ y|random ~ y|random %}
+
+<style>
+  .bg-{{ bgTypes }} { 
+    {% if module.advanced_settings.background_types == 'none' %}
+        background: none;
+    {% elif module.advanced_settings.background_types == 'image' %}
+      {% if module.advanced_settings.background_image.src %}
+        background-image: url({{ module.advanced_settings.background_image.src }});
+      {% endif %}
+    {% elif module.advanced_settings.background_types == 'color' %}
+      {% if module.advanced_settings.background_color %}
+      	background-color: rgba({{ module.advanced_settings.background_color.color|convert_rgb}}, {% if module.advanced_settings.background_color.opacity != 100 %}0.{{ module.advanced_settings.background_color.opacity }}{% else %}1{% endif %});
+      {% endif %}
+    {% endif %}
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+</style>
+
+<section class="flexible-forms mx-auto bg-{{ bgTypes }} {{ module.advanced_settings.spacing }} {{ module.advanced_settings.font_size }} {{ module.advanced_settings.font_weight }} {{ module.advanced_settings.width }} {{ module.advanced_settings.color }} {{ module.advanced_settings.text_alignment.text_alignment_desktop }} {{ module.advanced_settings.text_alignment.text_alignment_tablet }} {{ module.advanced_settings.text_alignment.text_alignment_phone }} {{ module.advanced_settings.display }}">
+  <div class="row-fluid">
+    <div class="span12 {% if module.advanced_settings.page_center %}page-center{% endif %}">
+      {% if module.forms_heading %}
+        <div class="{{ module.forms_heading_text_alignment.text_alignment_desktop }} {{ module.forms_heading_text_alignment.text_alignment_tablet }} {{ module.forms_heading_text_alignment.text_alignment_phone }}">
+          <h2>{{ module.forms_heading }}</h2>
+        </div>
+      {% endif %}
+     
+      {% form
+        form_to_use="{{ module.forms.form_id }}"
+        response_response_type="{{ module.forms.response_type }}"
+        response_message="{{ module.forms.message }}"
+        response_redirect_id="{{ module.forms.redirect_id }}"
+        response_redirect_url="{{module.forms.redirect_url}}"
+        gotowebinar_webinar_key="{{ module.module.forms.gotowebinar_webinar_key }"
+      %}
+      
+    </div>
+  </div>
+</section>
